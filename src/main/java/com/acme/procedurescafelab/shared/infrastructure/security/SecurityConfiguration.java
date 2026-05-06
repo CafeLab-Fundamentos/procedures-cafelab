@@ -12,11 +12,12 @@ public class SecurityConfiguration {
 
     private static final String DEFECTS_API = "/api/v1/defects/**";
     private static final String CALIBRATIONS_API = "/api/v1/calibrations/**";
+    private static final String CUPPING_SESSIONS_API = "/api/v1/cupping-sessions/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(DEFECTS_API, CALIBRATIONS_API).permitAll().anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(DEFECTS_API, CALIBRATIONS_API));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(DEFECTS_API, CALIBRATIONS_API, CUPPING_SESSIONS_API).permitAll().anyRequest().authenticated())
+                .csrf(csrf -> csrf.ignoringRequestMatchers(DEFECTS_API, CALIBRATIONS_API, CUPPING_SESSIONS_API));
         return http.build();
     }
 }
