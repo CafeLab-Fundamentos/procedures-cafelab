@@ -11,11 +11,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     private static final String DEFECTS_API = "/api/v1/defects/**";
+    private static final String CALIBRATIONS_API = "/api/v1/calibrations/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(DEFECTS_API).permitAll().anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(DEFECTS_API));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(DEFECTS_API, CALIBRATIONS_API).permitAll().anyRequest().authenticated())
+                .csrf(csrf -> csrf.ignoringRequestMatchers(DEFECTS_API, CALIBRATIONS_API));
         return http.build();
     }
 }
