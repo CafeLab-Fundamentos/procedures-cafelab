@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests  # ✅ No necesitas las env aquí si usas -DskipTests
+        run: mvn clean package -DskipTests
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -56,14 +59,19 @@ jobs:
           app-name: 'cafelab-procedures-back'
           app-settings-json: |
             [
-              { "name": "DB_USERNAME", "value": "${{ secrets.DB_USERNAME }}", "slotSetting": false },
-              { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false }
+              { "name": "DB_USERNAME",             "value": "${{ secrets.DB_USERNAME }}",  "slotSetting": false },
+              { "name": "DB_PASSWORD",             "value": "${{ secrets.DB_PASSWORD }}",  "slotSetting": false },
+              { "name": "WEBSITE_RUN_FROM_PACKAGE","value": "0",                           "slotSetting": false },
+              { "name": "JAVA_OPTS",               "value": "-Dserver.port=8080",          "slotSetting": false },
+              { "name": "PORT",                    "value": "8080",                        "slotSetting": false }
             ]
 
+      - name: Rename JAR
+        run: mv *.jar procedures-cafelab-app.jar
+
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'cafelab-procedures-back'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'procedures-cafelab-app.jar'
