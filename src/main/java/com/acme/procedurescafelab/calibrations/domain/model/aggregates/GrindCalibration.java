@@ -53,7 +53,7 @@ public class GrindCalibration extends AuditableAbstractAggregateRoot<GrindCalibr
     private String notes;
 
     @Lob
-    @Column(name = "sample_image", columnDefinition = "LONGTEXT")
+    @Column(name = "sample_image", columnDefinition = "TEXT")
     private String sampleImage;
 
     public GrindCalibration() {}
