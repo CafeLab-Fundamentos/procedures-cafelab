@@ -55,5 +55,3 @@ public class Ingredient extends AuditableAbstractAggregateRoot<Ingredient> {
 
     public String getName() { return name.value(); }
 }
-
-// deploy
