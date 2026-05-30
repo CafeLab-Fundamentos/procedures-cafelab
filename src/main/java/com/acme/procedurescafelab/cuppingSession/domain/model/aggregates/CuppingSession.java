@@ -37,7 +37,6 @@ public class CuppingSession extends AuditableAbstractAggregateRoot<CuppingSessio
     @Column(nullable = false)
     private boolean favorite;
 
-    @Lob
     @Column(name = "results_json", columnDefinition = "TEXT")
     private String resultsJson;
 
