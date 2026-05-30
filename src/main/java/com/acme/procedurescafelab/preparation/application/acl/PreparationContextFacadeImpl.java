@@ -93,8 +93,8 @@ public class PreparationContextFacadeImpl implements PreparationContextFacade {
     }
 
     @Override
-    public boolean deleteIngredient(Long ingredientId) {
-        var deleteIngredientCommand = new DeleteIngredientCommand(ingredientId);
+    public boolean deleteIngredient(Long recipeId, Long ingredientId) {
+        var deleteIngredientCommand = new DeleteIngredientCommand(recipeId, ingredientId);
         return ingredientCommandService.handle(deleteIngredientCommand);
     }
 

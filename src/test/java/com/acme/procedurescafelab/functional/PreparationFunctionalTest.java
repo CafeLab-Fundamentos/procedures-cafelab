@@ -138,6 +138,23 @@ class PreparationFunctionalTest {
         mockMvc.perform(get("/api/v1/recipes/{recipeId}/ingredients", recipeId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Agua"));
+
+        long ingredientId = objectMapper
+                .readTree(mockMvc.perform(get("/api/v1/recipes/{recipeId}/ingredients", recipeId))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString())
+                .get(0)
+                .get("id")
+                .asLong();
+
+        mockMvc.perform(delete("/api/v1/recipes/{recipeId}/ingredients/{ingredientId}", recipeId, ingredientId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Ingrediente eliminado exitosamente"));
+
+        mockMvc.perform(get("/api/v1/recipes/{recipeId}/ingredients", recipeId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 
     private long createRecipe(long userId, String name) throws Exception {

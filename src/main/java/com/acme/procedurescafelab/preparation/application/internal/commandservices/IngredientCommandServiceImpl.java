@@ -7,6 +7,7 @@ import com.acme.procedurescafelab.preparation.domain.model.commands.DeleteIngred
 import com.acme.procedurescafelab.preparation.domain.services.IngredientCommandService;
 import com.acme.procedurescafelab.preparation.infrastructure.persistence.jpa.repositories.IngredientRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -44,15 +45,14 @@ public class IngredientCommandServiceImpl implements IngredientCommandService {
     }
 
     @Override
+    @Transactional
     public boolean handle(DeleteIngredientCommand command) {
-        try {
-            if (ingredientRepository.existsById(command.ingredientId())) {
-                ingredientRepository.deleteById(command.ingredientId());
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            return false;
-        }
+        return ingredientRepository
+                .findByIdAndRecipeId(command.ingredientId(), command.recipeId())
+                .map(ingredient -> {
+                    ingredientRepository.delete(ingredient);
+                    return true;
+                })
+                .orElse(false);
     }
 }

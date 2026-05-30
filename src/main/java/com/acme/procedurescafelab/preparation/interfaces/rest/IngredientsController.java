@@ -129,12 +129,12 @@ public class IngredientsController {
     public ResponseEntity<?> deleteIngredient(
             @PathVariable Long recipeId, @PathVariable Long ingredientId) {
         var ingredients = preparationContextFacade.getIngredientsByRecipeId(recipeId);
-        boolean belongs =
-                ingredients.stream().anyMatch(i -> i.getId().equals(ingredientId));
+        boolean belongs = ingredients.stream()
+                .anyMatch(i -> i.getId() != null && i.getId().equals(ingredientId));
         if (!belongs) {
             return forbidden("Ingrediente no pertenece a esta receta");
         }
-        var deleted = preparationContextFacade.deleteIngredient(ingredientId);
+        var deleted = preparationContextFacade.deleteIngredient(recipeId, ingredientId);
         if (deleted) {
             return ResponseEntity.ok(new MessageResource("Ingrediente eliminado exitosamente"));
         }

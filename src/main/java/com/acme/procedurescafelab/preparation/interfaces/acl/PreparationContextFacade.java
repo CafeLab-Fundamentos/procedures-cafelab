@@ -26,7 +26,7 @@ public interface PreparationContextFacade {
 
     Long updateIngredient(Long ingredientId, String name, Double amount, String unit);
 
-    boolean deleteIngredient(Long ingredientId);
+    boolean deleteIngredient(Long recipeId, Long ingredientId);
 
     List<Ingredient> getIngredientsByRecipeId(Long recipeId);
 
